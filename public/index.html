@@ -5,9 +5,9 @@
 
  <meta charset="UTF-8">
 
- <title>PWA con Formulario</title>
+ <title>Archivos</title>
 
- <meta name="description" content="Ejemplo de PWA con Formulario">
+ <meta name="description" content="Ejemplo de PWA con Formulario - Archivos">
 
  <script type="module" src="js/registraServiceWorker.js"></script>
  <script type="module" src="libclienteweb/manejaErrores.js"></script>
@@ -34,113 +34,36 @@
 
 <body>
 
- <form id="formulario" novalidate>
+ <md-app-bar class="centered" adicional="tab">
+  <h1>Archivos y Cámara</h1>
+ </md-app-bar>
 
-  <md-app-bar class="centered" adicional="tab">
+ <nav-tab-fixed id="tab"></nav-tab-fixed>
 
-   <h1>PWA con Formulario</h1>
+ <section>
 
-  </md-app-bar>
+  <p>
+   <label class="md-filled-text-field float">
+    <input type="file" accept="image/*" capture="camera">
+    <span>Foto de Móvil</span>
+   </label>
+  </p>
 
-  <nav-tab-fixed id="tab"></nav-tab-fixed>
+  <p>
+   <label class="md-filled-text-field float">
+    <input type="file" accept="video/*" capture="">
+    <span>Video de Móvil</span>
+   </label>
+  </p>
 
-  <section>
+  <p>
+   <label class="md-filled-text-field float">
+    <input type="file">
+    <span>Archivo</span>
+   </label>
+  </p>
 
-   <!-- Usa
-    class="float"
-   cuando quieras que la etiqueta esté arriba todo el tiempo. -->
-   <p>
-    <label class="md-filled-text-field float">
-     <output name="respuesta">Todavía no hay respuesta</output>
-     <span>Respuesta</span>
-    </label>
-   </p>
-
-   <p>
-    <label class="md-filled-text-field">
-     <input name="nombre" required placeholder="Nombre*">
-     <span>Nombre *</span>
-     <small id="supportingNombre">Obligatorio</small>
-    </label>
-   </p>
-
-   <p>
-    <label class="md-filled-text-field">
-     <input name="email" type="email" placeholder="Email">
-     <span accesskey="M">Email</span>
-     <small id="supportingEmail">Texto con formato de email</small>
-    </label>
-   </p>
-
-   <p>
-    <label class="md-filled-text-field float">
-     <input name="fecha" type="date" placeholder="Fecha">
-     <span>Fecha de nacimiento</span>
-    </label>
-   </p>
-
-   <p>
-    <label class="md-filled-text-field">
-     <textarea name="dieccion" rows="3" placeholder="Dirección"></textarea>
-     <span>Dirección</span>
-    </label>
-   </p>
-
-   <p>
-    <button id="botonSaludo" class="md-filled-button">Saludar</button>
-    <button id="botonDatos" class="md-outline-button">Datos</button>
-   </p>
-
-  </section>
-
- </form>
-
- <script type="module">
-
-  import { muestraTextoDeAyuda } from "./libclienteweb/muestraTextoDeAyuda.js"
-
-  formulario.nombre.addEventListener("input", copiaMensajes)
-  formulario.email.addEventListener("input", copiaMensajes)
-  formulario.addEventListener("submit", procesa)
-
-  function copiaMensajes() {
-   muestraTextoDeAyuda(formulario.nombre, supportingNombre, "Obligatorio")
-   muestraTextoDeAyuda(
-    formulario.email, supportingEmail, "Texto con formato de email"
-   )
-  }
-
-  /**
-   * @param {SubmitEvent} evt
-   */
-  function procesa(evt) {
-   evt.preventDefault()
-   copiaMensajes()
-   if (
-    formulario.nombre.validity.valid
-    && formulario.email.validity.valid
-    && formulario.fecha.validity.valid
-    && formulario.dieccion.validity.valid
-   ) {
-    const botonSeleccionado = evt.submitter
-    if (botonSeleccionado === botonSaludo) {
-     saluda()
-    } else if (botonSeleccionado === botonDatos) {
-     datos()
-    }
-   }
-  }
-
-  function saluda() {
-   formulario.respuesta.value = `Hola ${formulario.nombre.value}`
-  }
-
-  function datos() {
-   formulario.respuesta.value =
-    `Nombre: ${formulario.nombre.value} Email: ${formulario.email.value}`
-  }
-
- </script>
+ </section>
 
 </body>
 

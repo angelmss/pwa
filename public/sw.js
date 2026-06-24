@@ -1,12 +1,12 @@
 /* Este archivo debe estar colocado en la carpeta raíz del sitio. */
 
-const VERSION = "1.4" // Incrementada para forzar actualización
+const VERSION = "1.6" // Incrementada para forzar actualización
 const CACHE = "pwamd"
 
 const ARCHIVOS = [
   "index.html",
-  "archivos.html",
   "gps.html",
+  "camara.html",
   "ayuda.html",
   "css/estilos.css",
   "css/material-symbols-outlined.css",
