@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "pwamdex"
-  }
+    "default": "pwa2-155ff"
+  },
+  "targets": {},
+  "etags": {}
 }

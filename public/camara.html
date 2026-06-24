@@ -56,12 +56,12 @@
   <div style="display: flex; flex-wrap: wrap; gap: 24px; margin-top: 16px;">
    <div style="display: inline-block; vertical-align: top;">
     <h2>Preview</h2>
-    <video id="preview" width="160" height="120" autoplay muted></video>
+    <video id="preview" width="160" height="120" autoplay muted playsinline webkit-playsinline></video>
    </div>
 
    <div style="display: inline-block; vertical-align: top;">
     <h2>Recording</h2>
-    <video id="recording" width="160" height="120" controls></video>
+    <video id="recording" width="160" height="120" controls playsinline></video>
     <p><a id="descarga" class="md-outline-button" style="display: inline-block; text-decoration: none;">Descarga</a></p>
     <div id="mensajes"></div>
    </div>
@@ -88,7 +88,7 @@
     });
     preview.srcObject = stream;
     descarga.href = stream;
-    preview.captureStream = preview.captureStream || preview.mozCaptureStream;
+
     await new Promise(resolve => preview.onplaying = resolve);
    } catch (e) {
     log(e.message);
@@ -97,11 +97,26 @@
 
   async function graba() {
    try {
+    // Parche iPhone: Se pasa el stream directo, no captureStream() que falla en Safari
     const recordedChunks = await grabaClip(stream, TIEMPO_DE_GRABACION);
-    let recordedBlob = new Blob(recordedChunks, { type: "video/webm" });
+    
+    // Parche iPhone: Detección dinámica del tipo de formato soportado (mp4 en iOS, webm en el resto)
+    let tipoMime = "video/webm";
+    if (typeof MediaRecorder.isTypeSupported === "function") {
+     if (MediaRecorder.isTypeSupported("video/mp4")) {
+      tipoMime = "video/mp4";
+     } else if (MediaRecorder.isTypeSupported("video/quicktime")) {
+      tipoMime = "video/quicktime";
+     }
+    }
+
+    let recordedBlob = new Blob(recordedChunks, { type: tipoMime });
     recording.src = URL.createObjectURL(recordedBlob);
     descarga.href = recording.src;
-    descarga.download = "RecordedVideo.webm";
+    
+    // Extensión dinámica de descarga según el formato
+    descarga.download = tipoMime.includes("mp4") || tipoMime.includes("quicktime") ? "RecordedVideo.mp4" : "RecordedVideo.webm";
+    
     log("Exitosamente grabados " + recordedBlob.size + " bytes de " + recordedBlob.type + " media.");
    } catch (e) {
     log(e.message);
@@ -109,7 +124,9 @@
   }
 
   function para() {
-   detiene(preview.srcObject);
+   if (preview.srcObject) {
+    detiene(preview.srcObject);
+   }
   }
 
   function captura() {
@@ -119,7 +136,15 @@
   }
 
   function grabaClip(stream, milisegundos) {
-   let recorder = new MediaRecorder(stream);
+   // Parche iPhone: Manejo seguro de opciones de formato
+   let opciones = {};
+   if (typeof MediaRecorder.isTypeSupported === "function") {
+    if (MediaRecorder.isTypeSupported("video/mp4")) opciones = { mimeType: "video/mp4" };
+    else if (MediaRecorder.isTypeSupported("video/quicktime")) opciones = { mimeType: "video/quicktime" };
+    else if (MediaRecorder.isTypeSupported("video/webm")) opciones = { mimeType: "video/webm" };
+   }
+
+   let recorder = new MediaRecorder(stream, opciones);
    let data = [];
    recorder.ondataavailable = event => data.push(event.data);
    recorder.start();
