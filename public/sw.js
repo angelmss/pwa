@@ -3,7 +3,7 @@
 // @ts-nocheck
 /* global self, ServiceWorkerGlobalScope, caches, fetch */
 
-const VERSION = "1.7" 
+const VERSION = "1.8" 
 const CACHE = "pwamd"
 
 const ARCHIVOS = [
