@@ -1,6 +1,9 @@
 /* Este archivo debe estar colocado en la carpeta raíz del sitio. */
 
-const VERSION = "1.6" // Incrementada para forzar actualización
+// @ts-nocheck
+/* global self, ServiceWorkerGlobalScope, caches, fetch */
+
+const VERSION = "1.6" 
 const CACHE = "pwamd"
 
 const ARCHIVOS = [
@@ -17,25 +20,23 @@ const ARCHIVOS = [
   "fonts/MaterialSymbolsOutlined[FILL,GRAD,opsz,wght].woff2",
   "fonts/Roboto-Italic-VariableFont_wdth,wght.ttf",
   "fonts/Roboto-VariableFont_wdth,wght.ttf",
-  "img/icono2048.png",
-  "img/maskable_icon.png",
+  "img/maskable_icon_x48.png",
+  "img/maskable_icon_x72.png",
+  "img/maskable_icon_x96.png",
   "img/maskable_icon_x128.png",
   "img/maskable_icon_x192.png",
   "img/maskable_icon_x384.png",
-  "img/maskable_icon_x48.png",
   "img/maskable_icon_x512.png",
-  "img/maskable_icon_x72.png",
-  "img/maskable_icon_x96.png",
+  "img/maskable_icon_x1600.png",
   "img/screenshot_horizontal.png",
   "img/screenshot_vertical.png",
   "js/nav-tab-fixed.js",
   "js/registraServiceWorker.js",
   "libclienteweb/abreElementoHtml.js",
-  "libclienteweb/cierraElementoHtmo.js",
+  "libclienteweb/cierraElementoHtml.js",
   "libclienteweb/ES_APPLE.js",
   "libclienteweb/getAttribute.js",
   "libclienteweb/manejaErrores.js",
-  "libclienteweb/muestraError.js",
   "libclienteweb/muestraTextoDeAyuda.js",
   "libclienteweb/ProblemDetailsError.js",
   "libclienteweb/querySelector.js",
@@ -75,7 +76,10 @@ if (self instanceof ServiceWorkerGlobalScope) {
     }
   })
 
-  self.addEventListener("activate", () => console.log("Service Worker 1.1 activo."))
+  self.addEventListener("activate", (evt) => {
+    console.log(`Service Worker ${VERSION} activo.`)
+    evt.waitUntil(self.clients.claim())
+  })
 }
 
 async function llenaElCache() {

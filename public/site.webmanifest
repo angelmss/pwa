@@ -13,14 +13,14 @@
   "screenshots": [
     {
       "src": "/img/screenshot_horizontal.png",
-      "sizes": "760x384",
+      "sizes": "1366x555",
       "type": "image/png",
       "form_factor": "wide",
       "label": "PWA con Material Design"
     },
     {
       "src": "/img/screenshot_vertical.png",
-      "sizes": "557x759",
+      "sizes": "623x597",
       "type": "image/png",
       "form_factor": "narrow",
       "label": "PWA con Material Design (2)"
